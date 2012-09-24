@@ -29,6 +29,19 @@ function inputVarsSelect($name, $options, $label = null)
 	}
 	echo '</select>';
 }
+
+/**
+ * Simple checkbox for vars
+ * @param $name
+ * @param $label
+ */
+function inputVarsCheckbox($name, $label)
+{
+	if($label == null) { $label = ucfirst(str_replace('_', ' ', $name)); }
+	echo sprintf('<label class="checkbox" for="%1$s"><input type="checkbox" name="vars[%1$s]" id="%1$s" /> %2$s</label>',
+		$name, $label);
+}
+
 ?><!doctype html>
 <html>
 <head>
@@ -124,6 +137,12 @@ checked,bool</textarea>
 						}
 					}
 				}
+			?>
+		</fieldset>
+		<fieldset>
+			<legend>Other Options</legend>
+			<?php
+				inputVarsCheckbox('include_assets', 'Include JavaScript and CSS on each page in the admin.');
 			?>
 		</fieldset>
 		<input type="submit" value="Give me the candy!" />

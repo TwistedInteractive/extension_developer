@@ -32,9 +32,9 @@ function createSQL($str)
 	foreach($a as $line)
 	{
 		$b = explode(',', $line);
-		$sqlArr[] = '`'.$b[0].'` '.strtoupper($b[1]);
+		$sqlArr[] = str_replace(array("\r", "\n"), '', "\t\t\t  ".'`'.$b[0].'` '.strtoupper($b[1]));
 	}
-	return implode(", ", $sqlArr);
+	return implode(",\n", $sqlArr);
 }
 
 // Set the vars:
@@ -67,7 +67,7 @@ if($vars['TYPE'] == 'Field')
 			CREATE TABLE IF NOT EXISTS `tbl_fields_'.$vars['FIELD_FILE_NAME'].'` (
 				`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 				`field_id` INT(11) UNSIGNED NOT NULL,
-				'.$vars['FIELD_FIELD_SQL'].'
+'.$vars['FIELD_FIELD_SQL'].'
 				PRIMARY KEY (`id`),
 				KEY `field_id` (`field_id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -92,6 +92,14 @@ if(!empty($vars['AUTHOR_NAME']))
 	$vars['AUTHOR_XML'] .= "\t\t".'</author>';
 } else {
 	$vars['AUTHOR_XML'] = '';
+}
+
+// Check if include_assets is set:
+if(isset($vars['INCLUDE_ASSETS']))
+{
+	if(!isset($_POST['delegate']['InitaliseAdminPageHead'])) {
+		$_POST['delegate']['InitaliseAdminPageHead'] = '/backend/';
+	}
 }
 
 // Functions, according to chosen delegates:
@@ -120,6 +128,17 @@ foreach($_POST['delegate'] as $name => $context)
 		}
 	}
 
+	$code = '';
+
+	if(isset($vars['INCLUDE_ASSETS']) && $name == 'InitaliseAdminPageHead')
+	{
+		$code .= '// Add JavaScript and CSS to the header:
+		Administration::instance()->Page->addScriptToHead(URL.\'/extensions/'.$vars['FOLDER_NAME'].'/assets/global.js\');
+		Administration::instance()->Page->addStylesheetToHead(URL.\'/extensions/'.$vars['FOLDER_NAME'].'/assets/screen.css\');
+
+		';
+	}
+
 	$vars['DELEGATES_FUNCTIONS'][] = "\t".'/*
 	 * Delegate \''.$name.'\' function
 	 * @param $context
@@ -127,7 +146,7 @@ foreach($_POST['delegate'] as $name => $context)
 '.$parameters.'	 */
 	public function action'.$name.'($context)
 	{
-		// Your code goes here...
+		'.$code.'// Your code goes here...
 	}
 	';
 }
@@ -140,20 +159,31 @@ $vars['DELEGATES_ARRAY'] = implode(",\n", $vars['DELEGATES_ARRAY']);
 // Flush export directory:
 flushDir('export');
 
-// Copy Template files:
-$templateFiles = glob('tpl/*');
-foreach($templateFiles as $file)
+function copyFiles($from, $to, $vars)
 {
-	if(is_file($file))
+	$templateFiles = glob($from);
+	foreach($templateFiles as $file)
 	{
-		$content  = file_get_contents($file);
-		$filename = 'export/'.basename($file);
-		foreach($vars as $key => $value)
+		if(is_file($file))
 		{
-			$content = str_replace('{{'.$key.'}}', $value, $content);
-			$filename = str_replace('{{'.$key.'}}', $value, $filename);
+			$content  = file_get_contents($file);
+			$filename = $to.'/'.basename($file);
+			foreach($vars as $key => $value)
+			{
+				$content = str_replace('{{'.$key.'}}', $value, $content);
+				$filename = str_replace('{{'.$key.'}}', $value, $filename);
+			}
+			// Save:
+			if(!file_exists($to)) { mkdir($to); }
+			file_put_contents($filename, $content);
 		}
-		// Save:
-		file_put_contents($filename, $content);
 	}
 }
+
+// Copy Template files:
+copyFiles('tpl/*', 'export', $vars);
+if(isset($vars['INCLUDE_ASSETS'])) { copyFiles('tpl/assets/*', 'export/assets', $vars); }
+
+// Fields:
+if($vars['TYPE'] == 'Field') { copyFiles('tpl/fields/*', 'export/fields', $vars); }
+

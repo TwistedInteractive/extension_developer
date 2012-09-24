@@ -34,7 +34,7 @@ Class Field{{FIELD_CLASS_NAME}} extends Field
 			CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
 			  `id` int(11) unsigned NOT NULL auto_increment,
 			  `entry_id` int(11) unsigned NOT NULL,
-			  {{FIELD_DATA_TABLE_SQL}}
+{{FIELD_DATA_SQL}}
 			  PRIMARY KEY  (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 		");
