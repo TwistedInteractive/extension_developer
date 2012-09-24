@@ -242,3 +242,7 @@ if($vars['TYPE'] == 'Field') { copyFiles('tpl/fields/*', 'export/'.$vars['FOLDER
 // Zip that shit:
 if(file_exists('./tmp/extension.zip')) { unlink('./tmp/extension.zip'); }
 Zip('export/', './tmp/extension.zip');
+
+header('Content-type: application/zip');
+header('Content-Disposition: attachment; filename="extension.zip"');
+readfile('./tmp/extension.zip');
