@@ -4,12 +4,12 @@
  * @param $name
  * @param null $label
  */
-function inputVars($name, $label = null)
+function inputVars($name, $label = null, $debug = '')
 {
 	if($label == null) { $label = ucfirst(str_replace('_', ' ', $name)); }
 
-	echo sprintf('<label for="%1$s">%2$s:</label><input type="text" name="vars[%1$s]" id="%1$s" />',
-		$name, $label);
+	echo sprintf('<label for="%1$s">%2$s:</label><input data-debug="%3$s" type="text" name="vars[%1$s]" id="%1$s" />',
+		$name, $label, $debug);
 }
 
 /**
@@ -44,20 +44,20 @@ function inputVarsSelect($name, $options, $label = null)
 		<fieldset>
 			<legend>General Information</legend>
 			<?php
-				inputVars('name');
-				inputVars('description');
-				inputVars('version');
-				inputVars('github_url', 'GitHub URL');
+				inputVars('name', null, 'Test');
+				inputVars('description', null, 'This is a test description');
+				inputVars('version', null, '1.0');
+				inputVars('github_url', 'GitHub URL', 'https://github.com/kanduvisla/extension_developer');
 			?>
         </fieldset>
         <fieldset>
             <legend>Author Information</legend>
 			<?php
-				inputVars('author_name');
-				inputVars('author_website');
-				inputVars('author_email');
-				inputVars('github_name');
-				inputVars('symphony_name');
+				inputVars('author_name', null, 'John Doe');
+				inputVars('author_website', null, 'http://www.johndoe.org');
+				inputVars('author_email', null, 'me@johndoe.org');
+				inputVars('github_name', null, 'john_doe');
+				inputVars('symphony_name', null, 'john_doe');
 			?>
         </fieldset>
 		<fieldset>
@@ -79,14 +79,14 @@ function inputVarsSelect($name, $options, $label = null)
 			</select>
 			<div class="own-type">
 				<?php
-					inputVars('own_type');
+					inputVars('own_type', null, 'Space Time Continuum Reaper');
 				?>
             </div>
 		</fieldset>
 		<fieldset class="type field">
 			<legend>Extra options for Field</legend>
 			<?php
-				inputVars('field_name');
+				inputVars('field_name', null, 'Test Field');
 				inputVarsSelect('field_default_show_column', array('yes'=>'Yes', 'no'=>'No'), 'Show Column by default');
 				inputVarsSelect('field_default_required', array('yes'=>'Yes', 'no'=>'No'), 'Required by default');
 				inputVarsSelect('field_default_location', array('main'=>'Main content', 'sidebar'=>'Sidebar'), 'Default location');

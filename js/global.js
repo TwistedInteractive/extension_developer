@@ -23,5 +23,12 @@ window.addEventListener('DOMContentLoaded', function(e){
         {
             elems[i].value = elems[i].getAttribute('data-debug');
         }
+        // Custom delegates:
+        var elems = document.querySelectorAll('label.delegate input');
+        for(var i=0; i<elems.length; i++)
+        {
+            if(Math.random() < .1) { elems[i].checked = true; }
+        }
+
     });
 });
