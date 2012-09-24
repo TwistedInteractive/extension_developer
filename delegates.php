@@ -3,7 +3,89 @@
 $delegatesArr = array();
 
 // Get the delegates from the Symphony site with some xpath and black magic:
-$dom = new DOMDocument();
+
+/*
+<delegate name="AddCustomPreferenceFieldsets">
+	<description>
+		<p>Add Extension custom preferences. Use the $wrapper reference to append objects.</p>
+	</description>
+	<location line="111">content/content.systempreferences.php</location>
+	<parameters>
+		<parameter name="context" type="string">
+			<description>
+				<p>'/system/preferences/'</p>
+			</description>
+		</parameter>
+		<parameter name="wrapper" type="XMLElement">
+			<description>
+				<p>An XMLElement of the current page</p>
+			</description>
+		</parameter>
+		<parameter name="errors" type="array">
+			<description>
+				<p>An array of errors</p>
+			</description>
+		</parameter>
+	</parameters>
+</delegate>
+ */
+
+$xml = simplexml_load_file('http://getsymphony.com/workspace/api/2.3/delegates.xml');
+/* @var $xml SimpleXMLElement */
+
+foreach($xml->xpath('/delegates/delegate') as $delegateXML)
+{
+	$context = $delegateXML->xpath('parameters/parameter[@name=\'context\']/description/p');
+	$arrKey  = trim(str_replace('\'', '', (string)$context[0]));
+	if(!isset($delegatesArr[$arrKey])) {
+		$delegatesArr[$arrKey] = array();
+	}
+	if(strpos((string)$context[0], '\' or \'') !== false)
+	{
+		// These are actually more delegates:
+		$a = explode('\' or \'', (string)$context);
+		foreach($a as $p)
+		{
+			$delegatesArr[$arrKey][] = array(
+				'name'   	 => (string)$delegateXML->attributes()->name,
+				'page'       => trim(str_replace('\'', '', $p)),
+				'parameters' => $delegateXML->xpath('parameters/parameter[not(@name=\'context\')]')
+			);
+		}
+	} elseif(strpos((string)$context[0], '(edit|new|info)') !== false) {
+		// These are actually 3 delegates:
+		$edit 	= str_replace('(edit|new|info)', 'edit', (string)$context[0]);
+		$new 	= str_replace('(edit|new|info)', 'new', (string)$context[0]);
+		$info 	= str_replace('(edit|new|info)', 'info', (string)$context[0]);
+		$delegatesArr[$arrKey][] = array(
+			'name'   	 => (string)$delegateXML->attributes()->name,
+			'page'       => trim(str_replace('\'', '', $edit)),
+			'parameters' => $delegateXML->xpath('parameters/parameter[not(@name=\'context\')]')
+		);
+		$delegatesArr[$arrKey][] = array(
+			'name'   	 => (string)$delegateXML->attributes()->name,
+			'page'       => trim(str_replace('\'', '', $new)),
+			'parameters' => $delegateXML->xpath('parameters/parameter[not(@name=\'context\')]')
+		);
+		$delegatesArr[$arrKey][] = array(
+			'name'   	 => (string)$delegateXML->attributes()->name,
+			'page'       => trim(str_replace('\'', '', $info)),
+			'parameters' => $delegateXML->xpath('parameters/parameter[not(@name=\'context\')]')
+		);
+	} else {
+		// Regular delegate:
+		$delegatesArr[$arrKey][] = array(
+			'name'   	 => (string)$delegateXML->attributes()->name,
+			'page'       => trim(str_replace('\'', '', (string)$context[0])),
+			'parameters' => $delegateXML->xpath('parameters/parameter[not(@name=\'context\')]')
+		);
+	}
+}
+
+ksort($delegatesArr);
+
+// Old style:
+/*$dom = new DOMDocument();
 @$dom->loadHTMLFile('http://getsymphony.com/learn/api/2.3/delegates/');
 
 $xpath = new DOMXPath($dom);
@@ -44,4 +126,4 @@ foreach($sections as $section)
 
 	$delegatesArr[] = $sectionArr;
 
-}
+}*/

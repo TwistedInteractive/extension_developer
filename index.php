@@ -34,10 +34,10 @@
 				// Pull them delegates from the Symphony site:
 				@include 'delegates.php';
 
-				foreach($delegatesArr as $section)
+				foreach($delegatesArr as $contextName => $delegates)
 				{
-					echo '<h4>'.$section['name'].'</h4>';
-					foreach($section['items'] as $delegate)
+					echo '<h4>'.$contextName.'</h4>';
+					foreach($delegates as $delegate)
 					{
 						echo sprintf('
 							<label class="delegate">
