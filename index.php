@@ -1,12 +1,35 @@
 <?php
-	function inputVars($name, $label = null)
-	{
-		if($label == null) { $label = ucfirst(str_replace('_', ' ', $name)); }
+/**
+ * Default vars input box
+ * @param $name
+ * @param null $label
+ */
+function inputVars($name, $label = null)
+{
+	if($label == null) { $label = ucfirst(str_replace('_', ' ', $name)); }
 
-		echo sprintf('<label for="%1$s">%2$s:</label><input type="text" name="vars[%1$s]" id="%1$s" />',
-			$name, $label);
+	echo sprintf('<label for="%1$s">%2$s:</label><input type="text" name="vars[%1$s]" id="%1$s" />',
+		$name, $label);
+}
+
+/**
+ * Simple dropdown with options for vars
+ * @param $name
+ * @param $options
+ * @param null $label
+ */
+function inputVarsSelect($name, $options, $label = null)
+{
+	if($label == null) { $label = ucfirst(str_replace('_', ' ', $name)); }
+	echo sprintf('<label for="%1$s">%2$s:</label><select name="vars[%1$s]" id="%1$s">',
+		$name, $label);
+	foreach($options as $key => $value)
+	{
+		echo '<option value="'.$key.'">'.$value.'</option>';
 	}
-?>
+	echo '</select>';
+}
+?><!doctype html>
 <html>
 <head>
 	<title>Symphony Extension Developer</title>
@@ -16,6 +39,7 @@
 <body>
 	<h1>Symphony Extension Developer</h1>
 	<h3>Create them extensions with ease!</h3>
+	<a href="#" id="testdata">debug: fill with test data</a>
 	<form method="post" action="compile.php">
 		<fieldset>
 			<legend>General Information</legend>
@@ -61,6 +85,21 @@
 		</fieldset>
 		<fieldset class="type field">
 			<legend>Extra options for Field</legend>
+			<?php
+				inputVars('field_name');
+				inputVarsSelect('field_default_show_column', array('yes'=>'Yes', 'no'=>'No'), 'Show Column by default');
+				inputVarsSelect('field_default_required', array('yes'=>'Yes', 'no'=>'No'), 'Required by default');
+				inputVarsSelect('field_default_location', array('main'=>'Main content', 'sidebar'=>'Sidebar'), 'Default location');
+			?>
+			<label for="field_field_sql">Database fields for field:<br /><em>Use simple format: [fieldname],[fieldtype]</em></label>
+			<textarea name="field_field_sql" id="field_field_sql">related_field,int(11)
+send_notifications,bool</textarea>
+            <label for="field_data_sql">Database fields for data:<br /><em>Use simple format: [fieldname],[fieldtype]</em></label>
+            <textarea name="field_data_sql" id="field_data_sql">handle,tinytext
+value,mediumtext
+amount,int(11)
+checked,bool</textarea>
+			<p class="info"><em>If you want to use more complex SQL-statements, or need to create more than one table, edit the PHP-files manualy after creation.</em></p>
 		</fieldset>
 		<fieldset>
 			<legend>Delegates</legend>

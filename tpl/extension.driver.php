@@ -44,7 +44,7 @@ class Extension_{{CLASS_NAME}} extends Extension
 	 */
 	public function install()
 	{
-{{INSTALL_INSTRUCTIONS}}
+		{{INSTALL_INSTRUCTIONS}}
 	}
 
 	/**
@@ -52,7 +52,7 @@ class Extension_{{CLASS_NAME}} extends Extension
 	 */
 	public function uninstall()
 	{
-{{UNINSTALL_INSTRUCTIONS}}
+		{{UNINSTALL_INSTRUCTIONS}}
 	}
 
 	/**

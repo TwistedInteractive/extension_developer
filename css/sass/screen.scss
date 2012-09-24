@@ -46,6 +46,14 @@ body {
 label {
 	display: inline-block;
 	width: 150px;
+	vertical-align: top;
+	padding-top: 10px;
+	line-height: 20px;
+	em {
+		color: #888;
+		font-style: italic;
+		font-size: 11px;
+	}
 	&.delegate {
 		position: relative;
 		width: 240px;
@@ -55,6 +63,7 @@ label {
 		margin-right: 10px;
 		font-weight: bold;
 		border-bottom: 1px solid #eee;
+		line-height: 11px;
 		cursor: pointer;
 		@include transition(color 250ms, background 250ms);
 		@include border-radius(5px);
@@ -76,11 +85,21 @@ label {
 	}
 }
 
-input[type=text], select {
+p.info {
+	font-size: 11px;
+	color: #888;
+	padding: 10px 0;
+}
+
+input[type=text], select, textarea {
 	width: 350px;
 	border: 1px solid #ccc;
 	@include box-shadow(1px 1px 2px rgba(0, 0, 0, .25) inset);
 	padding: 5px;
+}
+
+textarea {
+	height: 100px;
 }
 
 input[type=submit] {
