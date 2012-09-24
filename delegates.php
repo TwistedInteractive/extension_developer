@@ -61,17 +61,17 @@ foreach($xml->xpath('/delegates/delegate') as $delegateXML)
 		if(!isset($delegatesArr[$edit])) { $delegatesArr[$edit] = array(); }
 		if(!isset($delegatesArr[$new])) { $delegatesArr[$new] = array(); }
 		if(!isset($delegatesArr[$info])) { $delegatesArr[$info] = array(); }
-		$delegatesArr[$arrKey][] = array(
+		$delegatesArr[$edit][] = array(
 			'name'   	 => (string)$delegateXML->attributes()->name,
 			'page'       => trim(str_replace('\'', '', $edit)),
 			'parameters' => $delegateXML->xpath('parameters/parameter[not(@name=\'context\')]')
 		);
-		$delegatesArr[$arrKey][] = array(
+		$delegatesArr[$new][] = array(
 			'name'   	 => (string)$delegateXML->attributes()->name,
 			'page'       => trim(str_replace('\'', '', $new)),
 			'parameters' => $delegateXML->xpath('parameters/parameter[not(@name=\'context\')]')
 		);
-		$delegatesArr[$arrKey][] = array(
+		$delegatesArr[$info][] = array(
 			'name'   	 => (string)$delegateXML->attributes()->name,
 			'page'       => trim(str_replace('\'', '', $info)),
 			'parameters' => $delegateXML->xpath('parameters/parameter[not(@name=\'context\')]')

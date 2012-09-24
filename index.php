@@ -67,16 +67,19 @@
 
 				foreach($delegatesArr as $contextName => $delegates)
 				{
-					echo '<h4>'.$contextName.'</h4>';
-					foreach($delegates as $delegate)
+					if(!empty($delegates))
 					{
-						echo sprintf('
-							<label class="delegate">
-								<input type="checkbox" name="delegate[%1$s]" value="%2$s" />
-								%1$s<br />
-								<span>%2$s</span>
-							</label>
-						', $delegate['name'], $delegate['page']);
+						echo '<h4>'.$contextName.'</h4>';
+						foreach($delegates as $delegate)
+						{
+							echo sprintf('
+								<label class="delegate">
+									<input type="checkbox" name="delegate[%1$s]" value="%2$s" />
+									%1$s<br />
+									<span>%2$s</span>
+								</label>
+							', $delegate['name'], $delegate['page']);
+						}
 					}
 				}
 			?>
