@@ -114,6 +114,8 @@ $vars['FIELD_FIELD_SQL']		= createSQL($_POST['field_field_sql']);
 $vars['FIELD_DATA_SQL']			= createSQL($_POST['field_data_sql']);
 $vars['INSTALL_INSTRUCTIONS']	= '';
 $vars['UNINSTALL_INSTRUCTIONS']	= '';
+$vars['FIELD_VARS']				= array();
+$vars['FIELD_CONSTRUCTOR']		= array();
 
 // Check if field installation instruction should be submitted:
 if($vars['TYPE'] == 'Field')
@@ -149,6 +151,15 @@ if(!empty($vars['AUTHOR_NAME']))
 } else {
 	$vars['AUTHOR_XML'] = '';
 }
+
+// Check if there should be a reference to the driver class:
+if(isset($vars['REFERENCE_DRIVER'])) {
+	$vars['FIELD_VARS'][] = 'protected $driver;';
+	$vars['FIELD_CONSTRUCTOR'][] = '$this->_driver = ExtensionManager::getInstance(\''.$vars['FOLDER_NAME'].'\');';
+}
+
+$vars['FIELD_VARS'] = implode("\n\t", $vars['FIELD_VARS']);
+$vars['FIELD_CONSTRUCTOR'] = implode("\n\t\t", $vars['FIELD_CONSTRUCTOR']);
 
 // Check if include_assets is set:
 if(isset($vars['INCLUDE_ASSETS']))

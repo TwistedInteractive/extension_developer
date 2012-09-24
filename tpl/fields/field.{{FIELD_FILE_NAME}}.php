@@ -9,6 +9,8 @@ if (!defined('__IN_SYMPHONY__')) die('<h2>Symphony Error</h2><p>You cannot direc
 
 Class Field{{FIELD_CLASS_NAME}} extends Field
 {
+	{{FIELD_VARS}}
+
 	/**
 	 * Constructor
 	 */
@@ -22,6 +24,8 @@ Class Field{{FIELD_CLASS_NAME}} extends Field
 		$this->set('show_column', '{{FIELD_DEFAULT_SHOW_COLUMN}}');
 		$this->set('required', '{{FIELD_DEFAULT_REQUIRED}}');
 		$this->set('location', '{{FIELD_DEFAULT_LOCATION}}');
+
+		{{FIELD_CONSTRUCTOR}}
 	}
 
 	/**

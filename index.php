@@ -159,6 +159,7 @@ checked,bool</textarea>
 			<legend>Other Options</legend>
 			<?php
 				inputVarsCheckbox('include_assets', 'Include JavaScript and CSS on each page in the admin.');
+				inputVarsCheckbox('reference_driver', 'Create references to the driver-class.');
 			?>
 		</fieldset>
 		<input type="submit" value="Give me the candy!" />
