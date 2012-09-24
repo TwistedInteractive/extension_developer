@@ -1,7 +1,7 @@
 <?php
 	function inputVars($name, $label = null)
 	{
-		if($label == null) { $label = ucfirst($name); }
+		if($label == null) { $label = ucfirst(str_replace('_', ' ', $name)); }
 
 		echo sprintf('<label for="%1$s">%2$s:</label><input type="text" name="vars[%1$s]" id="%1$s" />',
 			$name, $label);
@@ -11,6 +11,7 @@
 <head>
 	<title>Symphony Extension Developer</title>
 	<link rel="stylesheet" type="text/css" href="css/screen.css" />
+	<script type="text/javascript" src="js/global.js"></script>
 </head>
 <body>
 	<h1>Symphony Extension Developer</h1>
@@ -22,11 +23,41 @@
 				inputVars('name');
 				inputVars('description');
 				inputVars('version');
+				inputVars('github_url', 'GitHub URL');
+			?>
+        </fieldset>
+        <fieldset>
+            <legend>Author Information</legend>
+			<?php
+				inputVars('author_name');
+				inputVars('author_website');
+				inputVars('author_email');
+				inputVars('github_name');
+				inputVars('symphony_name');
 			?>
         </fieldset>
 		<fieldset>
 			<legend>Type</legend>
-
+			<label for="type">Type:</label>
+			<select name="vars[type]" id="type">
+                <option value="Event">Event - for extensions primarily providing frontend events</option>
+                <option value="Field">Field - for new field types</option>
+                <option value="Interface">Interface - if you modify Symphony's UI</option>
+                <option value="Membership">Membership - for user roles, Symphony users or frontend profiles</option>
+                <option value="Multilingual">Multilingual - allowing multilingual content</option>
+                <option value="Multimedia">Multimedia - images, video, uploads or media management</option>
+                <option value="Text Formatter">Text Formatter - text formatting and WYSIWYG editors</option>
+                <option value="Third Party Integration">Third Party Integration - such as MailChimp, Basecamp, Google Analytics etc</option>
+                <option value="Translation">Translation - backend UI translation ("language packs")</option>
+                <option value="Workflow">Workflow - if the extension provides new or modifies existing Symphony workflows</option>
+                <option value="Other">Other - everything else</option>
+				<option value="Own">Specify your own type...</option>
+			</select>
+			<div class="own-type">
+				<?php
+					inputVars('own_type');
+				?>
+            </div>
 		</fieldset>
 		<fieldset>
 			<legend>Delegates</legend>

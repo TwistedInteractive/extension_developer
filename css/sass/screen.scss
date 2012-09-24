@@ -76,7 +76,7 @@ label {
 	}
 }
 
-input[type=text] {
+input[type=text], select {
 	width: 350px;
 	border: 1px solid #ccc;
 	@include box-shadow(1px 1px 2px rgba(0, 0, 0, .25) inset);
@@ -97,6 +97,10 @@ input[type=submit] {
 	margin: auto;
 	font-weight: bold;
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
+}
+
+div.own-type {
+	display: none;
 }
 
 form {
