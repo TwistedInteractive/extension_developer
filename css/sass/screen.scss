@@ -113,7 +113,9 @@ fieldset {
 	padding: 20px;
 	background: #fff;
 	margin-bottom: 20px;
-
+	&.type {
+		display: none;
+	}
 }
 
 legend {

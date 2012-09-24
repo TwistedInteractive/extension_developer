@@ -59,6 +59,9 @@
 				?>
             </div>
 		</fieldset>
+		<fieldset class="type field">
+			<legend>Extra options for Field</legend>
+		</fieldset>
 		<fieldset>
 			<legend>Delegates</legend>
 			<?php
