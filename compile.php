@@ -28,14 +28,19 @@ function flushDir($dirName, $include_subdirs = true)
  */
 function createSQL($str)
 {
-	$sqlArr = array();
-	$a = explode("\n", $str);
-	foreach($a as $line)
+	if(!empty($str))
 	{
-		$b = explode(',', $line);
-		$sqlArr[] = str_replace(array("\r", "\n"), '', "\t\t\t  ".'`'.$b[0].'` '.strtoupper($b[1]));
+		$sqlArr = array();
+		$a = explode("\n", $str);
+		foreach($a as $line)
+		{
+			$b = explode(',', $line);
+			$sqlArr[] = str_replace(array("\r", "\n"), '', "\t\t\t  ".'`'.$b[0].'` '.strtoupper($b[1]));
+		}
+		return ",\n".implode(",\n", $sqlArr);
+	} else {
+		return '';
 	}
-	return implode(",\n", $sqlArr);
 }
 
 /**
@@ -118,8 +123,7 @@ if($vars['TYPE'] == 'Field')
 		Symphony::Database()->query("
 			CREATE TABLE IF NOT EXISTS `tbl_fields_'.$vars['FIELD_FILE_NAME'].'` (
 				`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-				`field_id` INT(11) UNSIGNED NOT NULL,
-'.$vars['FIELD_FIELD_SQL'].'
+				`field_id` INT(11) UNSIGNED NOT NULL'.$vars['FIELD_FIELD_SQL'].',
 				PRIMARY KEY (`id`),
 				KEY `field_id` (`field_id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
