@@ -74,7 +74,8 @@ Class Field{{FIELD_CLASS_NAME}} extends Field
 
 		$label = Widget::Label($this->get('label'));
 		if($this->get('required') != 'yes') $label->appendChild(new XMLElement('i', __('Optional')));
-		$label->appendChild(Widget::Input('fields'.$fieldnamePrefix.'['.$this->get('element_name').']'.$fieldnamePostfix, (strlen($value) != 0 ? $value : NULL)));
+
+		{{FIELD_PUBLISH_FUNCTION}}
 
 		if($flagWithError != NULL) $wrapper->appendChild(Widget::Error($label, $flagWithError));
 		else $wrapper->appendChild($label);
@@ -110,4 +111,5 @@ Class Field{{FIELD_CLASS_NAME}} extends Field
 		);
 	}
 
+	{{FIELD_PARSE_XSL}}
 }

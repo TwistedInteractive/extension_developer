@@ -129,6 +129,9 @@ value,mediumtext
 amount,int(11)
 checked,bool</textarea>
 			<p class="info"><em>If you want to use more complex SQL-statements, or need to create more than one table, edit the PHP-files manualy after creation.</em></p>
+			<?php
+				inputVarsCheckbox('field_parse_xsl', 'Use XSL to create the HTML in publish pages (Trust me, this will change the way you write extensions!).');
+			?>
 		</fieldset>
 		<fieldset>
 			<legend>Delegates</legend>

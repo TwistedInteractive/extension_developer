@@ -169,6 +169,43 @@ if(isset($vars['INCLUDE_ASSETS']))
 	}
 }
 
+// Check if simple XSL function should be added for field:
+if(isset($vars['FIELD_PARSE_XSL']))
+{
+	$vars['FIELD_PARSE_XSL'] = '/**
+	 * Little helper function to make use of XSL and XML in your extensions.
+	 * @param $xsl
+	 * @param $xml
+	 * @return string
+	 */
+	private function parseXSL($xsl, $xml)
+	{
+		$xslt = new XSLTProcessor();
+		$xslt->importStylesheet(new  SimpleXMLElement($xsl));
+		return $xslt->transformToXml(new SimpleXMLElement($xml));
+	}
+	';
+	$vars['FIELD_PUBLISH_FUNCTION'] = '// The XML Element with all the data which the XSL can use:
+		$xml = new XMLElement(\'data\');
+		$xml->appendChild(new XMLElement(\'field\', null, array(
+			\'name\' => \'fields\'.$fieldnamePrefix.\'[\'.$this->get(\'element_name\').\']\'.$fieldnamePostfix,
+			\'value\'=> $value
+		)));
+
+		// Create a div with the content of the parsed XSL file:
+		$label->appendChild(
+			new XMLElement(\'div\', $this->parseXSL(
+					file_get_contents(EXTENSIONS.\'/'.$vars['FOLDER_NAME'].'/fields/publish.xsl\'),
+					$xml->generate()
+				)
+			)
+		);
+		';
+} else {
+	$vars['FIELD_PARSE_XSL'] = '';
+	$vars['FIELD_PUBLISH_FUNCTION'] = '$label->appendChild(Widget::Input(\'fields\'.$fieldnamePrefix.\'[\'.$this->get(\'element_name\').\']\'.$fieldnamePostfix, (strlen($value) != 0 ? $value : NULL)));';
+}
+
 // Functions, according to chosen delegates:
 $vars['DELEGATES_ARRAY'] = array();
 $vars['DELEGATES_FUNCTIONS'] = array();
@@ -253,6 +290,7 @@ if(isset($vars['INCLUDE_ASSETS'])) { copyFiles('tpl/assets/*', 'export/'.$vars['
 
 // Fields:
 if($vars['TYPE'] == 'Field') { copyFiles('tpl/fields/*', 'export/'.$vars['FOLDER_NAME'].'/fields', $vars); }
+if(!isset($_POST['vars']['field_parse_xsl'])) { unlink('tpl/fields/publish.xsl'); }
 
 if(class_exists('ZipArchive')) {
 
