@@ -7,7 +7,7 @@
 		<type>{{TYPE}}</type>
 	</types>
 	<authors>
-{{AUTHOR_DATA}}
+{{AUTHOR_XML}}
 	</authors>
 	<releases>
 		<release version="{{VERSION}}" date="{{DATE}}" min="2.3" />

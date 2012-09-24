@@ -2,6 +2,25 @@
 
 require_once('delegates.php');
 
+// Functions:
+/**
+ * Flush a directory
+ * @param $dirName
+ * @param bool $include_subdirs
+ */
+function flushDir($dirName, $include_subdirs = true)
+{
+	$files = glob($dirName.'/*');
+	foreach($files as $file){
+		if(is_file($file))
+		{
+			unlink($file);
+		} elseif(is_dir($file) && $include_subdirs) {
+			flushDir($file);
+		}
+	}
+}
+
 // Set the vars:
 $vars = array();
 foreach($_POST['vars'] as $key => $value)
@@ -67,9 +86,27 @@ foreach($_POST['delegate'] as $name => $context)
 	{
 		// Your code goes here...
 	}
-
 	';
 }
 
 $vars['DELEGATES_FUNCTIONS'] = implode("\n", $vars['DELEGATES_FUNCTIONS']);
 $vars['DELEGATES_ARRAY'] = implode(",\n", $vars['DELEGATES_ARRAY']);
+
+// And last but not least, copy & change the template files:
+
+// Flush export directory:
+flushDir('export');
+
+// Copy Template files:
+$templateFiles = glob('tpl/*');
+foreach($templateFiles as $file)
+{
+	$content = file_get_contents($file);
+	foreach($vars as $key => $value)
+	{
+		$content = str_replace('{{'.$key.'}}', $value, $content);
+	}
+	// Export:
+	$filename = 'export/'.basename($file);
+	file_put_contents($filename, $content);
+}

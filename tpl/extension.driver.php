@@ -7,7 +7,6 @@
 class Extension_{{CLASS_NAME}} extends Extension
 {
 
-
 	/**
 	 * About information
 	 * For if you want to create a pre-2.3-extension
@@ -40,7 +39,6 @@ class Extension_{{CLASS_NAME}} extends Extension
 	}
 
 {{DELEGATES_FUNCTIONS}}
-
 	/**
 	 * Installation instructions
 	 */
