@@ -18,7 +18,7 @@ window.addEventListener('DOMContentLoaded', function(e){
     // For debugging:
     document.getElementById('testdata').addEventListener('click', function(e){
         e.preventDefault();
-        var elems = document.querySelectorAll('input');
+        var elems = document.querySelectorAll('input[type=text]');
         for(var i=0; i<elems.length; i++)
         {
             elems[i].value = elems[i].getAttribute('data-debug');

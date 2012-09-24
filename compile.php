@@ -75,7 +75,7 @@ if($vars['TYPE'] == 'Field')
 		';
 	// Uninstall instructions:
 	$vars['UNINSTALL_INSTRUCTIONS'] .= '// Drop tables:
-		Symphony::Database()->query("DROP TABLE `tbl_fields_'.$vars['FIELD_FILE_NAME']`");
+		Symphony::Database()->query("DROP TABLE `tbl_fields_'.$vars['FIELD_FILE_NAME'].'`");
 		';
 }
 
@@ -144,13 +144,16 @@ flushDir('export');
 $templateFiles = glob('tpl/*');
 foreach($templateFiles as $file)
 {
-	$content  = file_get_contents($file);
-	$filename = 'export/'.basename($file);
-	foreach($vars as $key => $value)
+	if(is_file($file))
 	{
-		$content = str_replace('{{'.$key.'}}', $value, $content);
-		$filename = str_replace('{{'.$key.'}}', $value, $filename);
+		$content  = file_get_contents($file);
+		$filename = 'export/'.basename($file);
+		foreach($vars as $key => $value)
+		{
+			$content = str_replace('{{'.$key.'}}', $value, $content);
+			$filename = str_replace('{{'.$key.'}}', $value, $filename);
+		}
+		// Save:
+		file_put_contents($filename, $content);
 	}
-	// Save:
-	file_put_contents($filename, $content);
 }
