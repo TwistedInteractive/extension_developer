@@ -29,8 +29,14 @@ $delegatesArr = array();
 	</parameters>
 </delegate>
  */
+if(is_writable('tmp'))
+{
+	copy('http://getsymphony.com/workspace/api/2.3/delegates.xml', 'tmp/delegates.xml');
+	$xml = simplexml_load_file('tmp/delegates.xml');
+} else {
+	$xml = simplexml_load_file('http://getsymphony.com/workspace/api/2.3/delegates.xml');
+}
 
-$xml = simplexml_load_file('http://getsymphony.com/workspace/api/2.3/delegates.xml');
 /* @var $xml SimpleXMLElement */
 
 foreach($xml->xpath('/delegates/delegate') as $delegateXML)
