@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension id="{{FOLDER_NAME}}" xmlns="http://symphony-cms.com/schemas/extension/1.0">
+	<name>{{NAME}}</name>
+	<description>{{DESCRIPTION}}</description>
+	<repo type="github">{{GITHUB_URL}}</repo>
+	<types>
+		<type>{{TYPE}}</type>
+	</types>
+	<authors>
+{{AUTHOR_DATA}}
+	</authors>
+	<releases>
+		<release version="{{VERSION}}" date="{{DATE}}" min="2.3" />
+	</releases>
+</extension>

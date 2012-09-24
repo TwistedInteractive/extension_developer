@@ -37,16 +37,16 @@ foreach($xml->xpath('/delegates/delegate') as $delegateXML)
 {
 	$context = $delegateXML->xpath('parameters/parameter[@name=\'context\']/description/p');
 	$arrKey  = trim(str_replace('\'', '', (string)$context[0]));
-	if(!isset($delegatesArr[$arrKey])) {
-		$delegatesArr[$arrKey] = array();
-	}
+	if(!isset($delegatesArr[$arrKey])) { $delegatesArr[$arrKey] = array(); }
 	if(strpos((string)$context[0], '\' or \'') !== false)
 	{
 		// These are actually more delegates:
-		$a = explode('\' or \'', (string)$context);
+		$a = explode('\' or \'', (string)$context[0]);
 		foreach($a as $p)
 		{
-			$delegatesArr[$arrKey][] = array(
+			$p = str_replace('\'', '', $p);
+			if(!isset($delegatesArr[$p])) { $delegatesArr[$p] = array(); }
+			$delegatesArr[$p][] = array(
 				'name'   	 => (string)$delegateXML->attributes()->name,
 				'page'       => trim(str_replace('\'', '', $p)),
 				'parameters' => $delegateXML->xpath('parameters/parameter[not(@name=\'context\')]')
@@ -54,9 +54,13 @@ foreach($xml->xpath('/delegates/delegate') as $delegateXML)
 		}
 	} elseif(strpos((string)$context[0], '(edit|new|info)') !== false) {
 		// These are actually 3 delegates:
-		$edit 	= str_replace('(edit|new|info)', 'edit', (string)$context[0]);
-		$new 	= str_replace('(edit|new|info)', 'new', (string)$context[0]);
-		$info 	= str_replace('(edit|new|info)', 'info', (string)$context[0]);
+		$arrKey = str_replace('\'', '', (string)$context[0]);
+		$edit 	= str_replace('(edit|new|info)', 'edit', $arrKey);
+		$new 	= str_replace('(edit|new|info)', 'new', $arrKey);
+		$info 	= str_replace('(edit|new|info)', 'info', $arrKey);
+		if(!isset($delegatesArr[$edit])) { $delegatesArr[$edit] = array(); }
+		if(!isset($delegatesArr[$new])) { $delegatesArr[$new] = array(); }
+		if(!isset($delegatesArr[$info])) { $delegatesArr[$info] = array(); }
 		$delegatesArr[$arrKey][] = array(
 			'name'   	 => (string)$delegateXML->attributes()->name,
 			'page'       => trim(str_replace('\'', '', $edit)),
