@@ -17,6 +17,7 @@ function flushDir($dirName, $include_subdirs = true)
 			unlink($file);
 		} elseif(is_dir($file) && $include_subdirs) {
 			flushDir($file);
+			rmdir($file);
 		}
 	}
 }
@@ -35,6 +36,57 @@ function createSQL($str)
 		$sqlArr[] = str_replace(array("\r", "\n"), '', "\t\t\t  ".'`'.$b[0].'` '.strtoupper($b[1]));
 	}
 	return implode(",\n", $sqlArr);
+}
+
+/**
+ * Zip a Folder
+ * @param $source
+ * @param $destination
+ * @return bool
+ */
+function Zip($source, $destination)
+{
+	if (!extension_loaded('zip') || !file_exists($source)) {
+		return false;
+	}
+
+	$zip = new ZipArchive();
+	if (!$zip->open($destination, ZIPARCHIVE::CREATE)) {
+		return false;
+	}
+
+	$source = str_replace('\\', '/', realpath($source));
+
+	if (is_dir($source) === true)
+	{
+		$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
+
+		foreach ($files as $file)
+		{
+			$file = str_replace('\\', '/', $file);
+
+			// Ignore "." and ".." folders
+			if( in_array(substr($file, strrpos($file, '/')+1), array('.', '..')) )
+				continue;
+
+			$file = realpath($file);
+
+			if (is_dir($file) === true)
+			{
+				$zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+			}
+			else if (is_file($file) === true)
+			{
+				$zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+			}
+		}
+	}
+	else if (is_file($source) === true)
+	{
+		$zip->addFromString(basename($source), file_get_contents($source));
+	}
+
+	return $zip->close();
 }
 
 // Set the vars:
@@ -181,9 +233,12 @@ function copyFiles($from, $to, $vars)
 }
 
 // Copy Template files:
-copyFiles('tpl/*', 'export', $vars);
-if(isset($vars['INCLUDE_ASSETS'])) { copyFiles('tpl/assets/*', 'export/assets', $vars); }
+copyFiles('tpl/*', 'export/'.$vars['FOLDER_NAME'], $vars);
+if(isset($vars['INCLUDE_ASSETS'])) { copyFiles('tpl/assets/*', 'export/'.$vars['FOLDER_NAME'].'/assets', $vars); }
 
 // Fields:
-if($vars['TYPE'] == 'Field') { copyFiles('tpl/fields/*', 'export/fields', $vars); }
+if($vars['TYPE'] == 'Field') { copyFiles('tpl/fields/*', 'export/'.$vars['FOLDER_NAME'].'/fields', $vars); }
 
+// Zip that shit:
+if(file_exists('./tmp/extension.zip')) { unlink('./tmp/extension.zip'); }
+Zip('export/', './tmp/extension.zip');
