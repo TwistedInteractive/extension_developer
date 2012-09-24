@@ -144,3 +144,21 @@ legend {
 	font-weight: bold;
 	color: #000;
 }
+
+div.error {
+	border: 1px solid #800;
+	background: #fcc;
+	@include border-radius(5px);
+	padding: 5px;
+	color: #400;
+	line-height: 20px;
+	margin-top: 30px;
+	h4 {
+		padding: 0;
+		color: #400;
+	}
+	ul {
+		list-style-type: disc;
+		margin-left: 20px;
+	}
+}

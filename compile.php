@@ -239,10 +239,15 @@ if(isset($vars['INCLUDE_ASSETS'])) { copyFiles('tpl/assets/*', 'export/'.$vars['
 // Fields:
 if($vars['TYPE'] == 'Field') { copyFiles('tpl/fields/*', 'export/'.$vars['FOLDER_NAME'].'/fields', $vars); }
 
-// Zip that shit:
-if(file_exists('./tmp/extension.zip')) { unlink('./tmp/extension.zip'); }
-Zip('export/', './tmp/extension.zip');
+if(class_exists('ZipArchive')) {
 
-header('Content-type: application/zip');
-header('Content-Disposition: attachment; filename="extension.zip"');
-readfile('./tmp/extension.zip');
+	// Zip that shit:
+	if(file_exists('./tmp/extension.zip')) { unlink('./tmp/extension.zip'); }
+	Zip('export/', './tmp/extension.zip');
+
+	header('Content-type: application/zip');
+	header('Content-Disposition: attachment; filename="extension.zip"');
+	readfile('./tmp/extension.zip');
+} else {
+	echo 'Your extension is created and you can download it from the export-folder. Grab it while it\'s hot!';
+}

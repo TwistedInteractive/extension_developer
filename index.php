@@ -52,7 +52,22 @@ function inputVarsCheckbox($name, $label)
 <body>
 	<h1>Symphony Extension Developer</h1>
 	<h3>Create them extensions with ease!</h3>
-	<a href="#" id="testdata">debug: fill with test data</a>
+<!--	<a href="#" id="testdata">debug: fill with test data</a>-->
+	<?php
+		$errors = array();
+		if(!is_writable('exports')) { $errors[] = 'The folder <code>export</code> is not writable.'; }
+		if(!is_writable('tmp')) { $errors[] = 'The folder <code>export</code> is not writable.'; }
+		if(!class_exists('ZipArchive')) { $errors[] = 'PHPs\' <code>ZipArchive</code> module not found. Zip cannot be created.
+			You can still create your extensions, but after running the script, you have to manually download the content of the <code>export</code>-folder.'; }
+		if(!empty($errors))
+		{
+			echo '<div class="error"><h4>Oh oh...</h4><p>Before proceeding, please fix the following issues.</p><ul>';
+			foreach($errors as $error) {
+				echo '<li>'.$error.'</li>';
+			}
+			echo '</ul></div>';
+		}
+	?>
 	<form method="post" action="compile.php">
 		<fieldset>
 			<legend>General Information</legend>
@@ -77,6 +92,7 @@ function inputVarsCheckbox($name, $label)
 			<legend>Type</legend>
 			<label for="type">Type:</label>
 			<select name="vars[type]" id="type">
+				<option>Select a type...</option>
                 <option value="Event">Event - for extensions primarily providing frontend events</option>
                 <option value="Field">Field - for new field types</option>
                 <option value="Interface">Interface - if you modify Symphony's UI</option>
