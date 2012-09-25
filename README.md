@@ -2,6 +2,9 @@
 
 Create Symphony extensions with ease
 
+A live demo can be seen/used at [gielberkers.com/extension-developer](http://www.gielberkers.com/extension-developer).
+Please note that this demo does not represent the latest working state of this repository.
+
 ## Wait, what?
 
 That's right! Now **you too** can create awesome Symphony extensions and lift the platform to new heights! This utility
