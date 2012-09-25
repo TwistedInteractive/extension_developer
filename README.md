@@ -1,4 +1,4 @@
-# extension_developer
+# Symphony Extension Developer
 
 Create Symphony extensions with ease
 
@@ -20,6 +20,6 @@ to work with, and easy to setup:
 
 These are just some of the many features this tool brings to you! Just try it out!
 
- ## But I am already a great extension developer, why should I care?
+## But I am already a great extension developer, why should I care?
 
- Same reasons as above. Create a boilerplate in a jiffy and work from there!
+Same reasons as above. Create a boilerplate in a jiffy and work from there!
