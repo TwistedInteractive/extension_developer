@@ -292,6 +292,9 @@ if(isset($vars['INCLUDE_ASSETS'])) { copyFiles('tpl/assets/*', 'export/'.$vars['
 if($vars['TYPE'] == 'Field') { copyFiles('tpl/fields/*', 'export/'.$vars['FOLDER_NAME'].'/fields', $vars); }
 if(!isset($_POST['vars']['field_parse_xsl'])) { unlink('tpl/fields/publish.xsl'); }
 
+// Content:
+if(isset($vars['INCLUDE_CONTENT'])) { copyFiles('tpl/content/*', 'export/'.$vars['FOLDER_NAME'].'/content', $vars); }
+
 if(class_exists('ZipArchive')) {
 
 	// Zip that shit:

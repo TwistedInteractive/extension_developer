@@ -159,6 +159,12 @@ checked,bool</textarea>
 			?>
 		</fieldset>
 		<fieldset>
+			<legend>Content Pages</legend>
+			<?php
+				inputVarsCheckbox('include_content', 'Include a content page.');
+			?>
+		</fieldset>
+		<fieldset>
 			<legend>Other Options</legend>
 			<?php
 				inputVarsCheckbox('include_assets', 'Include JavaScript and CSS on each page in the admin.');
