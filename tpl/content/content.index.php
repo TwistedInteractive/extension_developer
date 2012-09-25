@@ -9,7 +9,22 @@ require_once(TOOLKIT . '/class.administrationpage.php');
 
 class contentExtension{{CLASS_NAME}}Index extends AdministrationPage
 {
+	{{CONTENT_VARS}}
 
+	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+
+		{{CONTENT_CONSTRUCTOR}}
+	}
+
+	/**
+	 * This function is called when building the page. Use it for example to add scripts and stylesheets to the page.
+	 * @param $context
+	 */
 	public function build($context)
 	{
 		parent::build($context);

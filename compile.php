@@ -116,6 +116,8 @@ $vars['INSTALL_INSTRUCTIONS']	= '';
 $vars['UNINSTALL_INSTRUCTIONS']	= '';
 $vars['FIELD_VARS']				= array();
 $vars['FIELD_CONSTRUCTOR']		= array();
+$vars['CONTENT_VARS']			= array();
+$vars['CONTENT_CONSTRUCTOR']	= array();
 
 // Check if field installation instruction should be submitted:
 if($vars['TYPE'] == 'Field')
@@ -156,10 +158,14 @@ if(!empty($vars['AUTHOR_NAME']))
 if(isset($vars['REFERENCE_DRIVER'])) {
 	$vars['FIELD_VARS'][] = 'protected $driver;';
 	$vars['FIELD_CONSTRUCTOR'][] = '$this->_driver = ExtensionManager::getInstance(\''.$vars['FOLDER_NAME'].'\');';
+	$vars['CONTENT_VARS'][] = 'protected $driver;';
+	$vars['CONTENT_CONSTRUCTOR'][] = '$this->_driver = ExtensionManager::getInstance(\''.$vars['FOLDER_NAME'].'\');';
 }
 
 $vars['FIELD_VARS'] = implode("\n\t", $vars['FIELD_VARS']);
 $vars['FIELD_CONSTRUCTOR'] = implode("\n\t\t", $vars['FIELD_CONSTRUCTOR']);
+$vars['CONTENT_VARS'] = implode("\n\t", $vars['CONTENT_VARS']);
+$vars['CONTENT_CONSTRUCTOR'] = implode("\n\t\t", $vars['CONTENT_CONSTRUCTOR']);
 
 // Check if include_assets is set:
 if(isset($vars['INCLUDE_ASSETS']))
