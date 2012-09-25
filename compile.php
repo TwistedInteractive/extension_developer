@@ -298,7 +298,7 @@ if(isset($vars['INCLUDE_ASSETS'])) { copyFiles('tpl/assets/*', 'export/'.$vars['
 
 // Fields:
 if($vars['TYPE'] == 'Field') { copyFiles('tpl/fields/*', 'export/'.$vars['FOLDER_NAME'].'/fields', $vars); }
-if(!isset($_POST['vars']['field_parse_xsl'])) { unlink('tpl/fields/publish.xsl'); }
+if(!isset($_POST['vars']['field_parse_xsl'])) { unlink('export/'.$vars['FOLDER_NAME'].'/fields/publish.xsl'); }
 
 // Content:
 if(isset($vars['INCLUDE_CONTENT'])) { copyFiles('tpl/content/*', 'export/'.$vars['FOLDER_NAME'].'/content', $vars); }
