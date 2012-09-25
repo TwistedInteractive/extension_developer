@@ -11,17 +11,19 @@ require_once('delegates.php');
 function flushDir($dirName, $include_subdirs = true)
 {
 	$files = glob($dirName.'/*');
-	foreach($files as $file){
-		if(is_file($file))
-		{
-			unlink($file);
-		} elseif(is_dir($file) && $include_subdirs) {
-			flushDir($file);
-			rmdir($file);
+	if(is_array($files) && !empty($files))
+	{
+		foreach($files as $file){
+			if(is_file($file))
+			{
+				unlink($file);
+			} elseif(is_dir($file) && $include_subdirs) {
+				flushDir($file);
+				rmdir($file);
+			}
 		}
 	}
 }
-
 /**
  * Convert 'simple' format to SQL:
  * @param $str
