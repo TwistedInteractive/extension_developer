@@ -303,15 +303,18 @@ if(!isset($_POST['vars']['field_parse_xsl'])) { unlink('export/'.$vars['FOLDER_N
 // Content:
 if(isset($vars['INCLUDE_CONTENT'])) { copyFiles('tpl/content/*', 'export/'.$vars['FOLDER_NAME'].'/content', $vars); }
 
-if(class_exists('ZipArchive')) {
+if(!isset($_POST['update']))
+{
+	if(class_exists('ZipArchive')) {
 
-	// Zip that shit:
-	if(file_exists('./tmp/extension.zip')) { unlink('./tmp/extension.zip'); }
-	Zip('export/', './tmp/extension.zip');
+		// Zip that shit:
+		if(file_exists('./tmp/extension.zip')) { unlink('./tmp/extension.zip'); }
+		Zip('export/', './tmp/extension.zip');
 
-	header('Content-type: application/zip');
-	header('Content-Disposition: attachment; filename="extension.zip"');
-	readfile('./tmp/extension.zip');
-} else {
-	echo 'Your extension is created and you can download it from the export-folder. Grab it while it\'s hot!';
+		header('Content-type: application/zip');
+		header('Content-Disposition: attachment; filename="extension.zip"');
+		readfile('./tmp/extension.zip');
+	} else {
+		echo 'Your extension is created and you can download it from the export-folder. Grab it while it\'s hot!';
+	}
 }
