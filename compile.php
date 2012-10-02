@@ -217,50 +217,53 @@ if(isset($vars['FIELD_PARSE_XSL']))
 // Functions, according to chosen delegates:
 $vars['DELEGATES_ARRAY'] = array();
 $vars['DELEGATES_FUNCTIONS'] = array();
-foreach($_REQUEST['delegate'] as $name => $context)
+if(isset($_REQUEST['delegate']))
 {
-	$vars['DELEGATES_ARRAY'][] = "\t\t\t".'array(
-				\'page\'		=> \''.$context.'\',
-				\'delegate\'	=> \''.$name.'\',
-				\'callback\'	=> \'action'.$name.'\'
-			)';
-
-	$contextArr = $delegatesArr[$context];
-	$parameters = '';
-	foreach($contextArr as $arr)
+	foreach($_REQUEST['delegate'] as $name => $context)
 	{
-		if($arr['name'] == $name)
+		$vars['DELEGATES_ARRAY'][] = "\t\t\t".'array(
+					\'page\'		=> \''.$context.'\',
+					\'delegate\'	=> \''.$name.'\',
+					\'callback\'	=> \'action'.$name.'\'
+				)';
+
+		$contextArr = $delegatesArr[$context];
+		$parameters = '';
+		foreach($contextArr as $arr)
 		{
-			foreach($arr['parameters'] as $parameterXML)
+			if($arr['name'] == $name)
 			{
-				$attr = $parameterXML->attributes();
-				$desc = $parameterXML->xpath('description/p');
-				$parameters .= "\t".' *  - '.$attr['name'].' ('.$attr['type'].') : '.(string)$desc[0]."\n";
+				foreach($arr['parameters'] as $parameterXML)
+				{
+					$attr = $parameterXML->attributes();
+					$desc = $parameterXML->xpath('description/p');
+					$parameters .= "\t".' *  - '.$attr['name'].' ('.$attr['type'].') : '.(string)$desc[0]."\n";
+				}
 			}
 		}
-	}
 
-	$code = '';
+		$code = '';
 
-	if(isset($vars['INCLUDE_ASSETS']) && $name == 'InitaliseAdminPageHead')
-	{
-		$code .= '// Add JavaScript and CSS to the header:
-		Administration::instance()->Page->addScriptToHead(URL.\'/extensions/'.$vars['FOLDER_NAME'].'/assets/global.js\');
-		Administration::instance()->Page->addStylesheetToHead(URL.\'/extensions/'.$vars['FOLDER_NAME'].'/assets/screen.css\');
+		if(isset($vars['INCLUDE_ASSETS']) && $name == 'InitaliseAdminPageHead')
+		{
+			$code .= '// Add JavaScript and CSS to the header:
+			Administration::instance()->Page->addScriptToHead(URL.\'/extensions/'.$vars['FOLDER_NAME'].'/assets/global.js\');
+			Administration::instance()->Page->addStylesheetToHead(URL.\'/extensions/'.$vars['FOLDER_NAME'].'/assets/screen.css\');
 
+			';
+		}
+
+		$vars['DELEGATES_FUNCTIONS'][] = "\t".'/*
+		 * Delegate \''.$name.'\' function
+		 * @param $context
+		 *  Provides the following parameters:
+	'.$parameters.'	 */
+		public function action'.$name.'($context)
+		{
+			'.$code.'// Your code goes here...
+		}
 		';
 	}
-
-	$vars['DELEGATES_FUNCTIONS'][] = "\t".'/*
-	 * Delegate \''.$name.'\' function
-	 * @param $context
-	 *  Provides the following parameters:
-'.$parameters.'	 */
-	public function action'.$name.'($context)
-	{
-		'.$code.'// Your code goes here...
-	}
-	';
 }
 
 $vars['DELEGATES_FUNCTIONS'] = implode("\n", $vars['DELEGATES_FUNCTIONS']);

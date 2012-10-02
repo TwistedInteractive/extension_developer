@@ -38,7 +38,7 @@ window.addEventListener('DOMContentLoaded', function(e){
     }
 
     // For live update:
-    var elems = document.querySelectorAll('input[type=checkbox]');
+    var elems = document.querySelectorAll('input, select, textarea');
     for(var i=0; i<elems.length; i++)
     {
         elems[i].addEventListener('change', function(e){

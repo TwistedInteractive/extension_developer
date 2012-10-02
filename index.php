@@ -125,12 +125,12 @@ function inputVarsCheckbox($name, $label)
 					?>
 					<label for="field_field_sql">Database fields for field:<br /><em>Use simple format: [fieldname],[fieldtype]</em></label>
 					<textarea name="field_field_sql" id="field_field_sql">related_field,int(11)
-		send_notifications,bool</textarea>
+send_notifications,bool</textarea>
 					<label for="field_data_sql">Database fields for data:<br /><em>Use simple format: [fieldname],[fieldtype]</em></label>
 					<textarea name="field_data_sql" id="field_data_sql">handle,tinytext
-		value,mediumtext
-		amount,int(11)
-		checked,bool</textarea>
+value,mediumtext
+amount,int(11)
+checked,bool</textarea>
 					<p class="info"><em>If you want to use more complex SQL-statements, or need to create more than one table, edit the PHP-files manualy after creation.</em></p>
 					<?php
 						inputVarsCheckbox('field_parse_xsl', 'Use XSL to create the HTML in publish pages (Trust me, this will change the way you write extensions!).');
