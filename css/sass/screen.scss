@@ -8,7 +8,7 @@
 
 html {
 	font-family: sans-serif;
-	background: #ccc;
+	// background: #ccc;
 	font-size: 12px;
 	color: #666;
 	overflow: hidden;
@@ -184,5 +184,35 @@ div.error {
 	ul {
 		list-style-type: disc;
 		margin-left: 20px;
+	}
+}
+
+ul.accordeon {
+	margin: 20px;
+	h4 {
+		background: #eee;
+		border: 1px solid #ddd;
+		padding: 10px;
+		margin: 0;
+		cursor: pointer;
+		em {
+			float: right;
+			font-style: italic;
+			font-weight: normal;
+			color: #888;
+		}
+	}
+	div.code {
+		padding: 10px;
+		border: 1px solid #ddd;
+		border-top: none;
+		display: none;
+		&.expanded {
+			display: block;
+		}
+	}
+	xmp {
+		margin: 0;
+		font-family: 'Consolas', monospace;
 	}
 }
