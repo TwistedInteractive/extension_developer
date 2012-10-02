@@ -171,6 +171,7 @@ checked,bool</textarea>
 					<legend>Other Options</legend>
 					<?php
 						inputVarsCheckbox('include_assets', 'Include JavaScript and CSS on each page in the admin.');
+						inputVarsCheckbox('include_preferences', 'Include example preferences.');
 						inputVarsCheckbox('reference_driver', 'Create references to the driver-class.');
 					?>
 				</fieldset>

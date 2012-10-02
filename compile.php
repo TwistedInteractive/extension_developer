@@ -177,6 +177,17 @@ if(isset($vars['INCLUDE_ASSETS']))
 	}
 }
 
+// Check if demo preferences should be created:
+if(isset($vars['INCLUDE_PREFERENCES']))
+{
+	if(!isset($_REQUEST['delegate']['AddCustomPreferenceFieldsets'])) {
+		$_REQUEST['delegate']['AddCustomPreferenceFieldsets'] = '/system/preferences/';
+	}
+	if(!isset($_REQUEST['delegate']['Save'])) {
+		$_REQUEST['delegate']['Save'] = '/system/preferences/';
+	}
+}
+
 // Check if simple XSL function should be added for field:
 if(isset($vars['FIELD_PARSE_XSL']))
 {
@@ -251,6 +262,51 @@ if(isset($_REQUEST['delegate']))
 			Administration::instance()->Page->addStylesheetToHead(URL.\'/extensions/'.$vars['FOLDER_NAME'].'/assets/screen.css\');
 
 			';
+		}
+
+		if(isset($vars['INCLUDE_PREFERENCES']) && $name == 'AddCustomPreferenceFieldsets')
+		{
+			$code .= '// Create preference group
+		$group = new XMLElement(\'fieldset\');
+		$group->setAttribute(\'class\', \'settings\');
+		$group->appendChild(new XMLElement(\'legend\', __(\''.$vars['NAME'].'\')));
+
+		$label = Widget::Label(__(\'Example #1\'));
+		$label->appendChild(Widget::Input(\'settings['.$vars['FOLDER_NAME'].'[example-1]\',
+			Symphony::Configuration()->get(\'example-1\', \''.$vars['FOLDER_NAME'].'\')));
+		$group->appendChild($label);
+
+		$label = Widget::Label(__(\'Example #2\'));
+		$label->appendChild(Widget::Input(\'settings['.$vars['FOLDER_NAME'].'[example-2]\',
+			Symphony::Configuration()->get(\'example-2\', \''.$vars['FOLDER_NAME'].'\')));
+		$group->appendChild($label);
+
+		// Append help
+		$group->appendChild(new XMLElement(\'p\', __(\'Hello world!\'), array(\'class\' => \'help\')));
+
+		// Append new preference group
+		$context[\'wrapper\']->appendChild($group);
+
+		';
+		}
+
+		if(isset($vars['INCLUDE_PREFERENCES']) && $name == 'Save')
+		{
+			$code .= '// Save the configuration
+		$data = $context[\'settings\'][\''.$vars['FOLDER_NAME'].'\'];
+		foreach($data as $key => $value)
+		{
+			Symphony::Configuration()->set($key, $value, \''.$vars['FOLDER_NAME'].'\');
+		}
+		if(version_compare(Administration::Configuration()->get(\'version\', \'symphony\'), \'2.2.5\', \'>\'))
+		{
+			// S2.3+
+			Symphony::Configuration()->write();
+		} else {
+			// S2.2.5-
+			Administration::instance()->saveConfig();
+		}
+		';
 		}
 
 		$vars['DELEGATES_FUNCTIONS'][] = "\t".'/*
