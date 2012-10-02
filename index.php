@@ -47,6 +47,7 @@ function inputVarsCheckbox($name, $label)
 <head>
 	<title>Symphony Extension Developer</title>
 	<link rel="stylesheet" type="text/css" href="css/screen.css" />
+    <script type="text/javascript" src="lib/ajaxform.js"></script>
 	<script type="text/javascript" src="js/global.js"></script>
 </head>
 <body>
@@ -173,8 +174,8 @@ function inputVarsCheckbox($name, $label)
 						inputVarsCheckbox('reference_driver', 'Create references to the driver-class.');
 					?>
 				</fieldset>
-				<input type="submit" value="Download me the candy!" />
-				<input type="submit" name="update" value="Update the candy!" />
+				<input type="submit" name="download" value="Download the candy!" />
+<!--				<input type="submit" name="update" value="Update the candy!" />-->
 			</form>
         </div>
     </article>

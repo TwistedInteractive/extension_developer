@@ -5,6 +5,9 @@
     <link rel="stylesheet" type="text/css" href="lib/prettify/prettify.css" />
     <script type="text/javascript" src="lib/prettify/prettify.js"></script>
 	<script type="text/javascript" src="js/show_export.js"></script>
+	<style type="text/css">
+		html { overflow: auto; }
+	</style>
 </head>
 <body>
 <ul class="accordeon">

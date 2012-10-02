@@ -98,7 +98,7 @@ function Zip($source, $destination)
 
 // Set the vars:
 $vars = array();
-foreach($_POST['vars'] as $key => $value)
+foreach($_REQUEST['vars'] as $key => $value)
 {
 	$vars[strtoupper($key)] = $value;
 }
@@ -112,8 +112,8 @@ $vars['DATE'] 					= date('Y-m-d');
 $vars['FOLDER_NAME']			= str_replace(' ', '_', strtolower($vars['NAME']));
 $vars['FIELD_CLASS_NAME']		= str_replace(' ', '_', $vars['FIELD_NAME']);
 $vars['FIELD_FILE_NAME']		= strtolower($vars['FIELD_CLASS_NAME']);
-$vars['FIELD_FIELD_SQL']		= createSQL($_POST['field_field_sql']);
-$vars['FIELD_DATA_SQL']			= createSQL($_POST['field_data_sql']);
+$vars['FIELD_FIELD_SQL']		= createSQL($_REQUEST['field_field_sql']);
+$vars['FIELD_DATA_SQL']			= createSQL($_REQUEST['field_data_sql']);
 $vars['INSTALL_INSTRUCTIONS']	= '';
 $vars['UNINSTALL_INSTRUCTIONS']	= '';
 $vars['FIELD_VARS']				= array();
@@ -172,8 +172,8 @@ $vars['CONTENT_CONSTRUCTOR'] = implode("\n\t\t", $vars['CONTENT_CONSTRUCTOR']);
 // Check if include_assets is set:
 if(isset($vars['INCLUDE_ASSETS']))
 {
-	if(!isset($_POST['delegate']['InitaliseAdminPageHead'])) {
-		$_POST['delegate']['InitaliseAdminPageHead'] = '/backend/';
+	if(!isset($_REQUEST['delegate']['InitaliseAdminPageHead'])) {
+		$_REQUEST['delegate']['InitaliseAdminPageHead'] = '/backend/';
 	}
 }
 
@@ -217,7 +217,7 @@ if(isset($vars['FIELD_PARSE_XSL']))
 // Functions, according to chosen delegates:
 $vars['DELEGATES_ARRAY'] = array();
 $vars['DELEGATES_FUNCTIONS'] = array();
-foreach($_POST['delegate'] as $name => $context)
+foreach($_REQUEST['delegate'] as $name => $context)
 {
 	$vars['DELEGATES_ARRAY'][] = "\t\t\t".'array(
 				\'page\'		=> \''.$context.'\',
@@ -298,12 +298,17 @@ if(isset($vars['INCLUDE_ASSETS'])) { copyFiles('tpl/assets/*', 'export/'.$vars['
 
 // Fields:
 if($vars['TYPE'] == 'Field') { copyFiles('tpl/fields/*', 'export/'.$vars['FOLDER_NAME'].'/fields', $vars); }
-if(!isset($_POST['vars']['field_parse_xsl'])) { unlink('export/'.$vars['FOLDER_NAME'].'/fields/publish.xsl'); }
+if(!isset($_REQUEST['vars']['field_parse_xsl'])) {
+	if(file_exists('export/'.$vars['FOLDER_NAME'].'/fields/publish.xsl'))
+	{
+		unlink('export/'.$vars['FOLDER_NAME'].'/fields/publish.xsl');
+	}
+}
 
 // Content:
 if(isset($vars['INCLUDE_CONTENT'])) { copyFiles('tpl/content/*', 'export/'.$vars['FOLDER_NAME'].'/content', $vars); }
 
-if(!isset($_POST['update']))
+if(isset($_REQUEST['download']))
 {
 	if(class_exists('ZipArchive')) {
 
@@ -317,4 +322,6 @@ if(!isset($_POST['update']))
 	} else {
 		echo 'Your extension is created and you can download it from the export-folder. Grab it while it\'s hot!';
 	}
+} else {
+	echo 'done';
 }

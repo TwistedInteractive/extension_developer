@@ -61,6 +61,7 @@ h4 {
 		padding: 0;
 		width: 100%;
 		height: 100%;
+		overflow: scroll;
 	}
 }
 
@@ -131,14 +132,15 @@ input[type=submit], input[type=button] {
 	border: 1px solid #080;
 	@include background-image(linear-gradient(#0f0, #0a0));
 	color: #fff;
-	display: inline-block;
+	display: block;
 	width: 200px;
 	@include border-radius(5px);
 	@include box-shadow(0 2px 4px rgba(0, 0, 0, .25));
 	cursor: pointer;
 	font-weight: bold;
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
-	float: left;
+	// float: left;
+	margin: auto;
 }
 
 input[type=button] {
