@@ -272,14 +272,16 @@ if(isset($_REQUEST['delegate']))
 		$group->appendChild(new XMLElement(\'legend\', __(\''.$vars['NAME'].'\')));
 
 		$label = Widget::Label(__(\'Example #1\'));
-		$label->appendChild(Widget::Input(\'settings['.$vars['FOLDER_NAME'].'[example-1]\',
+		$label->appendChild(Widget::Input(\'settings['.$vars['FOLDER_NAME'].'][example-1]\',
 			Symphony::Configuration()->get(\'example-1\', \''.$vars['FOLDER_NAME'].'\')));
 		$group->appendChild($label);
 
-		$label = Widget::Label(__(\'Example #2\'));
-		$label->appendChild(Widget::Input(\'settings['.$vars['FOLDER_NAME'].'[example-2]\',
-			Symphony::Configuration()->get(\'example-2\', \''.$vars['FOLDER_NAME'].'\')));
-		$group->appendChild($label);
+		$label = Widget::Label();
+		$value = Symphony::Configuration()->get(\'example-2\', \''.$vars['FOLDER_NAME'].'\');
+		if(empty($value)) { $value = \'yes\'; }
+		$input = Widget::Input(\'settings['.$vars['FOLDER_NAME'].'][example-2]\', \'yes\' , \'checkbox\', ($value == \'yes\' ? array(\'checked\'=>\'checked\') : null));
+		$label->setValue($input->generate() . \' \' . __(\'Example #2\'));
+		$fieldset->appendChild($label);
 
 		// Append help
 		$group->appendChild(new XMLElement(\'p\', __(\'Hello world!\'), array(\'class\' => \'help\')));
@@ -294,6 +296,7 @@ if(isset($_REQUEST['delegate']))
 		{
 			$code .= '// Save the configuration
 		$data = $context[\'settings\'][\''.$vars['FOLDER_NAME'].'\'];
+		if(!isset($data[\'example-2\'])) { $data[\'example-2\'] = \'no\'; }
 		foreach($data as $key => $value)
 		{
 			Symphony::Configuration()->set($key, $value, \''.$vars['FOLDER_NAME'].'\');
