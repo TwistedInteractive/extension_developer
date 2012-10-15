@@ -70,28 +70,28 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 /* line 9, sass/screen.scss */
 html {
   font-family: sans-serif;
-  background: #ccc;
   font-size: 12px;
   color: #666;
+  overflow: hidden;
 }
 
-/* line 16, sass/screen.scss */
+/* line 17, sass/screen.scss */
 h1 {
   font-size: 40px;
 }
 
-/* line 20, sass/screen.scss */
+/* line 21, sass/screen.scss */
 h2 {
   font-size: 30px;
 }
 
-/* line 24, sass/screen.scss */
+/* line 25, sass/screen.scss */
 h3 {
   font-size: 20px;
   color: #aaa;
 }
 
-/* line 29, sass/screen.scss */
+/* line 30, sass/screen.scss */
 h4 {
   display: block;
   font-weight: bold;
@@ -101,35 +101,59 @@ h4 {
   padding-top: 25px;
 }
 
-/* line 38, sass/screen.scss */
-body {
-  width: 600px;
-  padding: 20px;
-  margin: auto;
+/* line 39, sass/screen.scss */
+#main {
+  position: absolute;
+  left: 0;
+  width: 30%;
+  height: 100%;
+  overflow: auto;
   background: #fff;
   -webkit-box-shadow: 0 0 100px rgba(0, 0, 0, 0.25);
   -moz-box-shadow: 0 0 100px rgba(0, 0, 0, 0.25);
   box-shadow: 0 0 100px rgba(0, 0, 0, 0.25);
 }
+/* line 47, sass/screen.scss */
+#main div.inner {
+  padding: 20px;
+}
 
-/* line 46, sass/screen.scss */
+/* line 52, sass/screen.scss */
+#live {
+  position: absolute;
+  width: 70%;
+  height: 100%;
+  right: 0;
+  bottom: 0;
+}
+/* line 58, sass/screen.scss */
+#live iframe {
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+}
+
+/* line 68, sass/screen.scss */
 label {
   display: inline-block;
-  width: 150px;
+  width: 30%;
   vertical-align: top;
   padding-top: 10px;
   line-height: 20px;
 }
-/* line 52, sass/screen.scss */
+/* line 74, sass/screen.scss */
 label em {
   color: #888;
   font-style: italic;
   font-size: 11px;
 }
-/* line 57, sass/screen.scss */
+/* line 79, sass/screen.scss */
 label.delegate {
   position: relative;
-  width: 240px;
+  width: 40%;
   height: 20px;
   float: left;
   padding: 10px 0px 10px 30px;
@@ -148,39 +172,39 @@ label.delegate {
   -o-border-radius: 5px;
   border-radius: 5px;
 }
-/* line 70, sass/screen.scss */
+/* line 92, sass/screen.scss */
 label.delegate:hover {
   color: #fff;
   background: #333;
 }
-/* line 74, sass/screen.scss */
+/* line 96, sass/screen.scss */
 label.delegate input {
   position: absolute;
   left: 5px;
   top: 5px;
 }
-/* line 79, sass/screen.scss */
+/* line 101, sass/screen.scss */
 label.delegate span {
   font-weight: normal;
   font-size: 10px;
   color: #999;
   font-style: italic;
 }
-/* line 86, sass/screen.scss */
+/* line 108, sass/screen.scss */
 label.checkbox {
-  width: 560px;
+  width: 100%;
 }
 
-/* line 91, sass/screen.scss */
+/* line 113, sass/screen.scss */
 p.info {
   font-size: 11px;
   color: #888;
   padding: 10px 0;
 }
 
-/* line 97, sass/screen.scss */
+/* line 119, sass/screen.scss */
 input[type=text], select, textarea {
-  width: 350px;
+  width: 60%;
   border: 1px solid #ccc;
   -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25) inset;
   -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25) inset;
@@ -188,14 +212,13 @@ input[type=text], select, textarea {
   padding: 5px;
 }
 
-/* line 104, sass/screen.scss */
+/* line 126, sass/screen.scss */
 textarea {
   height: 100px;
 }
 
-/* line 108, sass/screen.scss */
-input[type=submit] {
-  clear: both;
+/* line 130, sass/screen.scss */
+input[type=submit], input[type=button] {
   padding: 5px 25px;
   border: 1px solid #080;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #00ff00), color-stop(100%, #00aa00));
@@ -215,22 +238,27 @@ input[type=submit] {
   -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
   cursor: pointer;
-  margin: auto;
   font-weight: bold;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  margin: auto;
 }
 
-/* line 124, sass/screen.scss */
+/* line 146, sass/screen.scss */
+input[type=button] {
+  float: right;
+}
+
+/* line 150, sass/screen.scss */
 div.own-type {
   display: none;
 }
 
-/* line 128, sass/screen.scss */
+/* line 154, sass/screen.scss */
 form {
   margin: 50px 0;
 }
 
-/* line 132, sass/screen.scss */
+/* line 158, sass/screen.scss */
 fieldset {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -244,18 +272,18 @@ fieldset {
   background: #fff;
   margin-bottom: 20px;
 }
-/* line 138, sass/screen.scss */
+/* line 164, sass/screen.scss */
 fieldset.type {
   display: none;
 }
 
-/* line 143, sass/screen.scss */
+/* line 169, sass/screen.scss */
 legend {
   font-weight: bold;
   color: #000;
 }
 
-/* line 148, sass/screen.scss */
+/* line 174, sass/screen.scss */
 div.error {
   border: 1px solid #800;
   background: #fcc;
@@ -269,13 +297,49 @@ div.error {
   line-height: 20px;
   margin-top: 30px;
 }
-/* line 156, sass/screen.scss */
+/* line 182, sass/screen.scss */
 div.error h4 {
   padding: 0;
   color: #400;
 }
-/* line 160, sass/screen.scss */
+/* line 186, sass/screen.scss */
 div.error ul {
   list-style-type: disc;
   margin-left: 20px;
+}
+
+/* line 192, sass/screen.scss */
+ul.accordeon {
+  margin: 20px;
+}
+/* line 194, sass/screen.scss */
+ul.accordeon h4 {
+  background: #eee;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 0;
+  cursor: pointer;
+}
+/* line 200, sass/screen.scss */
+ul.accordeon h4 em {
+  float: right;
+  font-style: italic;
+  font-weight: normal;
+  color: #888;
+}
+/* line 207, sass/screen.scss */
+ul.accordeon div.code {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-top: none;
+  display: none;
+}
+/* line 212, sass/screen.scss */
+ul.accordeon div.code.expanded {
+  display: block;
+}
+/* line 216, sass/screen.scss */
+ul.accordeon xmp {
+  margin: 0;
+  font-family: 'Consolas', monospace;
 }
