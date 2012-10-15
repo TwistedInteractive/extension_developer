@@ -59,6 +59,7 @@ class Extension_{{CLASS_NAME}} extends Extension
 	 * Update instructions
 	 * @param $previousVersion
 	 *  The version that is currently installed in this Symphony installation
+	 * @return boolean
 	 */
 	public function update($previousVersion) {
 		if (version_compare($previousVersion, '1.1', '<')) {

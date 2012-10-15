@@ -98,7 +98,7 @@ function Zip($source, $destination)
 
 // Set the vars:
 $vars = array();
-foreach($_POST['vars'] as $key => $value)
+foreach($_REQUEST['vars'] as $key => $value)
 {
 	$vars[strtoupper($key)] = $value;
 }
@@ -112,8 +112,8 @@ $vars['DATE'] 					= date('Y-m-d');
 $vars['FOLDER_NAME']			= str_replace(' ', '_', strtolower($vars['NAME']));
 $vars['FIELD_CLASS_NAME']		= str_replace(' ', '_', $vars['FIELD_NAME']);
 $vars['FIELD_FILE_NAME']		= strtolower($vars['FIELD_CLASS_NAME']);
-$vars['FIELD_FIELD_SQL']		= createSQL($_POST['field_field_sql']);
-$vars['FIELD_DATA_SQL']			= createSQL($_POST['field_data_sql']);
+$vars['FIELD_FIELD_SQL']		= createSQL($_REQUEST['field_field_sql']);
+$vars['FIELD_DATA_SQL']			= createSQL($_REQUEST['field_data_sql']);
 $vars['INSTALL_INSTRUCTIONS']	= '';
 $vars['UNINSTALL_INSTRUCTIONS']	= '';
 $vars['FIELD_VARS']				= array();
@@ -172,8 +172,19 @@ $vars['CONTENT_CONSTRUCTOR'] = implode("\n\t\t", $vars['CONTENT_CONSTRUCTOR']);
 // Check if include_assets is set:
 if(isset($vars['INCLUDE_ASSETS']))
 {
-	if(!isset($_POST['delegate']['InitaliseAdminPageHead'])) {
-		$_POST['delegate']['InitaliseAdminPageHead'] = '/backend/';
+	if(!isset($_REQUEST['delegate']['InitaliseAdminPageHead'])) {
+		$_REQUEST['delegate']['InitaliseAdminPageHead'] = '/backend/';
+	}
+}
+
+// Check if demo preferences should be created:
+if(isset($vars['INCLUDE_PREFERENCES']))
+{
+	if(!isset($_REQUEST['delegate']['AddCustomPreferenceFieldsets'])) {
+		$_REQUEST['delegate']['AddCustomPreferenceFieldsets'] = '/system/preferences/';
+	}
+	if(!isset($_REQUEST['delegate']['Save'])) {
+		$_REQUEST['delegate']['Save'] = '/system/preferences/';
 	}
 }
 
@@ -217,50 +228,101 @@ if(isset($vars['FIELD_PARSE_XSL']))
 // Functions, according to chosen delegates:
 $vars['DELEGATES_ARRAY'] = array();
 $vars['DELEGATES_FUNCTIONS'] = array();
-foreach($_POST['delegate'] as $name => $context)
+if(isset($_REQUEST['delegate']))
 {
-	$vars['DELEGATES_ARRAY'][] = "\t\t\t".'array(
-				\'page\'		=> \''.$context.'\',
-				\'delegate\'	=> \''.$name.'\',
-				\'callback\'	=> \'action'.$name.'\'
-			)';
-
-	$contextArr = $delegatesArr[$context];
-	$parameters = '';
-	foreach($contextArr as $arr)
+	foreach($_REQUEST['delegate'] as $name => $context)
 	{
-		if($arr['name'] == $name)
+		$vars['DELEGATES_ARRAY'][] = "\t\t\t".'array(
+					\'page\'		=> \''.$context.'\',
+					\'delegate\'	=> \''.$name.'\',
+					\'callback\'	=> \'action'.$name.'\'
+				)';
+
+		$contextArr = $delegatesArr[$context];
+		$parameters = '';
+		foreach($contextArr as $arr)
 		{
-			foreach($arr['parameters'] as $parameterXML)
+			if($arr['name'] == $name)
 			{
-				$attr = $parameterXML->attributes();
-				$desc = $parameterXML->xpath('description/p');
-				$parameters .= "\t".' *  - '.$attr['name'].' ('.$attr['type'].') : '.(string)$desc[0]."\n";
+				foreach($arr['parameters'] as $parameterXML)
+				{
+					$attr = $parameterXML->attributes();
+					$desc = $parameterXML->xpath('description/p');
+					$parameters .= "\t".' *  - '.$attr['name'].' ('.$attr['type'].') : '.(string)$desc[0]."\n";
+				}
 			}
 		}
-	}
 
-	$code = '';
+		$code = '';
 
-	if(isset($vars['INCLUDE_ASSETS']) && $name == 'InitaliseAdminPageHead')
-	{
-		$code .= '// Add JavaScript and CSS to the header:
-		Administration::instance()->Page->addScriptToHead(URL.\'/extensions/'.$vars['FOLDER_NAME'].'/assets/global.js\');
-		Administration::instance()->Page->addStylesheetToHead(URL.\'/extensions/'.$vars['FOLDER_NAME'].'/assets/screen.css\');
+		if(isset($vars['INCLUDE_ASSETS']) && $name == 'InitaliseAdminPageHead')
+		{
+			$code .= '// Add JavaScript and CSS to the header:
+			Administration::instance()->Page->addScriptToHead(URL.\'/extensions/'.$vars['FOLDER_NAME'].'/assets/global.js\');
+			Administration::instance()->Page->addStylesheetToHead(URL.\'/extensions/'.$vars['FOLDER_NAME'].'/assets/screen.css\');
+
+			';
+		}
+
+		if(isset($vars['INCLUDE_PREFERENCES']) && $name == 'AddCustomPreferenceFieldsets')
+		{
+			$code .= '// Create preference group
+		$group = new XMLElement(\'fieldset\');
+		$group->setAttribute(\'class\', \'settings\');
+		$group->appendChild(new XMLElement(\'legend\', __(\''.$vars['NAME'].'\')));
+
+		$label = Widget::Label(__(\'Example #1\'));
+		$label->appendChild(Widget::Input(\'settings['.$vars['FOLDER_NAME'].'][example-1]\',
+			Symphony::Configuration()->get(\'example-1\', \''.$vars['FOLDER_NAME'].'\')));
+		$group->appendChild($label);
+
+		$label = Widget::Label();
+		$value = Symphony::Configuration()->get(\'example-2\', \''.$vars['FOLDER_NAME'].'\');
+		if(empty($value)) { $value = \'yes\'; }
+		$input = Widget::Input(\'settings['.$vars['FOLDER_NAME'].'][example-2]\', \'yes\' , \'checkbox\', ($value == \'yes\' ? array(\'checked\'=>\'checked\') : null));
+		$label->setValue($input->generate() . \' \' . __(\'Example #2\'));
+		$fieldset->appendChild($label);
+
+		// Append help
+		$group->appendChild(new XMLElement(\'p\', __(\'Hello world!\'), array(\'class\' => \'help\')));
+
+		// Append new preference group
+		$context[\'wrapper\']->appendChild($group);
 
 		';
-	}
+		}
 
-	$vars['DELEGATES_FUNCTIONS'][] = "\t".'/*
-	 * Delegate \''.$name.'\' function
-	 * @param $context
-	 *  Provides the following parameters:
-'.$parameters.'	 */
-	public function action'.$name.'($context)
-	{
-		'.$code.'// Your code goes here...
+		if(isset($vars['INCLUDE_PREFERENCES']) && $name == 'Save')
+		{
+			$code .= '// Save the configuration
+		$data = $context[\'settings\'][\''.$vars['FOLDER_NAME'].'\'];
+		if(!isset($data[\'example-2\'])) { $data[\'example-2\'] = \'no\'; }
+		foreach($data as $key => $value)
+		{
+			Symphony::Configuration()->set($key, $value, \''.$vars['FOLDER_NAME'].'\');
+		}
+		if(version_compare(Administration::Configuration()->get(\'version\', \'symphony\'), \'2.2.5\', \'>\'))
+		{
+			// S2.3+
+			Symphony::Configuration()->write();
+		} else {
+			// S2.2.5-
+			Administration::instance()->saveConfig();
+		}
+		';
+		}
+
+		$vars['DELEGATES_FUNCTIONS'][] = "\t".'/*
+		 * Delegate \''.$name.'\' function
+		 * @param $context
+		 *  Provides the following parameters:
+	'.$parameters.'	 */
+		public function action'.$name.'($context)
+		{
+			'.$code.'// Your code goes here...
+		}
+		';
 	}
-	';
 }
 
 $vars['DELEGATES_FUNCTIONS'] = implode("\n", $vars['DELEGATES_FUNCTIONS']);
@@ -298,20 +360,30 @@ if(isset($vars['INCLUDE_ASSETS'])) { copyFiles('tpl/assets/*', 'export/'.$vars['
 
 // Fields:
 if($vars['TYPE'] == 'Field') { copyFiles('tpl/fields/*', 'export/'.$vars['FOLDER_NAME'].'/fields', $vars); }
-if(!isset($_POST['vars']['field_parse_xsl'])) { unlink('export/'.$vars['FOLDER_NAME'].'/fields/publish.xsl'); }
+if(!isset($_REQUEST['vars']['field_parse_xsl'])) {
+	if(file_exists('export/'.$vars['FOLDER_NAME'].'/fields/publish.xsl'))
+	{
+		unlink('export/'.$vars['FOLDER_NAME'].'/fields/publish.xsl');
+	}
+}
 
 // Content:
 if(isset($vars['INCLUDE_CONTENT'])) { copyFiles('tpl/content/*', 'export/'.$vars['FOLDER_NAME'].'/content', $vars); }
 
-if(class_exists('ZipArchive')) {
+if(isset($_REQUEST['download']))
+{
+	if(class_exists('ZipArchive')) {
 
-	// Zip that shit:
-	if(file_exists('./tmp/extension.zip')) { unlink('./tmp/extension.zip'); }
-	Zip('export/', './tmp/extension.zip');
+		// Zip that shit:
+		if(file_exists('./tmp/extension.zip')) { unlink('./tmp/extension.zip'); }
+		Zip('export/', './tmp/extension.zip');
 
-	header('Content-type: application/zip');
-	header('Content-Disposition: attachment; filename="extension.zip"');
-	readfile('./tmp/extension.zip');
+		header('Content-type: application/zip');
+		header('Content-Disposition: attachment; filename="extension.zip"');
+		readfile('./tmp/extension.zip');
+	} else {
+		echo 'Your extension is created and you can download it from the export-folder. Grab it while it\'s hot!';
+	}
 } else {
-	echo 'Your extension is created and you can download it from the export-folder. Grab it while it\'s hot!';
+	echo 'done';
 }

@@ -36,4 +36,24 @@ window.addEventListener('DOMContentLoaded', function(e){
             }
         });
     }
+
+    // For live update:
+    var elems = document.querySelectorAll('input, select, textarea');
+    for(var i=0; i<elems.length; i++)
+    {
+        elems[i].addEventListener('change', function(e){
+            liveUpdate();
+        });
+    }
 });
+
+function liveUpdate()
+{
+    // Serialize the form and submit it with AJAX:
+    ajaxSubmit(document.forms[0], function(xmlhttp){
+        if(xmlhttp.responseText == 'done')
+        {
+            document.querySelector('iframe').src = 'show_export.php?v=' + Math.random();
+        }
+    });
+}
