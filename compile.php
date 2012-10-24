@@ -316,8 +316,7 @@ if(isset($_REQUEST['delegate']))
 		 * @param $context
 		 *  Provides the following parameters:
 	'.$parameters.'	 */
-		public function action'.$name.'($context)
-		{
+		public function action'.$name.'($context) {
 			'.$code.'// Your code goes here...
 		}
 		';
