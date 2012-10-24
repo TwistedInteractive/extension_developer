@@ -197,8 +197,7 @@ if(isset($vars['FIELD_PARSE_XSL']))
 	 * @param $xml
 	 * @return string
 	 */
-	private function parseXSL($xsl, $xml)
-	{
+	private function parseXSL($xsl, $xml) {
 		$xslt = new XSLTProcessor();
 		$xslt->importStylesheet(new  SimpleXMLElement($xsl));
 		return $xslt->transformToXml(new SimpleXMLElement($xml));

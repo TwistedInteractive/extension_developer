@@ -7,15 +7,13 @@
 
 if (!defined('__IN_SYMPHONY__')) die('<h2>Symphony Error</h2><p>You cannot directly access this file</p>');
 
-Class Field{{FIELD_CLASS_NAME}} extends Field
-{
+Class Field{{FIELD_CLASS_NAME}} extends Field {
 	{{FIELD_VARS}}
 
 	/**
 	 * Constructor
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		parent::__construct();
 
 		$this->_name = __('{{FIELD_NAME}}');
@@ -32,8 +30,7 @@ Class Field{{FIELD_CLASS_NAME}} extends Field
 	 * Creation of the data table:
 	 * @return mixed
 	 */
-	public function createTable()
-	{
+	public function createTable() {
 		return Symphony::Database()->query("
 			CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
 			  `id` int(11) unsigned NOT NULL auto_increment,
@@ -67,8 +64,7 @@ Class Field{{FIELD_CLASS_NAME}} extends Field
 	 * @param integer $entry_id (optional)
 	 *	the entry id of this field. this defaults to null.
 	 */
-	public function displayPublishPanel(XMLElement &$wrapper, $data = null, $flagWithError = null, $fieldnamePrefix = null, $fieldnamePostfix = null, $entry_id = null)
-	{
+	public function displayPublishPanel(XMLElement &$wrapper, $data = null, $flagWithError = null, $fieldnamePrefix = null, $fieldnamePostfix = null, $entry_id = null) {
 		// Assuming your entry has a 'value'-column in it's data table:
 		$value = General::sanitize($data['value']);
 
@@ -101,8 +97,7 @@ Class Field{{FIELD_CLASS_NAME}} extends Field
 	 * @return array
 	 *	the processed field data.
 	 */
-	public function processRawFieldData($data, &$status, &$message=null, $simulate=false, $entry_id=null)
-	{
+	public function processRawFieldData($data, &$status, &$message=null, $simulate=false, $entry_id=null) {
 		$status = self::__OK__;
 
 		// Assuming your entry has a 'value'-column in it's data table:

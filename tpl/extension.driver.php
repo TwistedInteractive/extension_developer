@@ -4,15 +4,13 @@
  * {{DATE}}
  */
 
-class Extension_{{CLASS_NAME}} extends Extension
-{
+class Extension_{{CLASS_NAME}} extends Extension {
 
 	/**
 	 * About information
 	 * For if you want to create a pre-2.3-extension
 	 */
-	public function about()
-	{
+	public function about() {
 		return array(
 			'name'			=> '{{NAME}}',
 			'version'		=> '{{VERSION}}',
@@ -31,8 +29,7 @@ class Extension_{{CLASS_NAME}} extends Extension
 	 * Get the subscribed delegates
 	 * @return array
 	 */
-	public function getSubscribedDelegates()
-	{
+	public function getSubscribedDelegates() {
 		return array(
 {{DELEGATES_ARRAY}}
 		);
@@ -42,16 +39,14 @@ class Extension_{{CLASS_NAME}} extends Extension
 	/**
 	 * Installation instructions
 	 */
-	public function install()
-	{
+	public function install() {
 		{{INSTALL_INSTRUCTIONS}}
 	}
 
 	/**
 	 * Uninstall instructions
 	 */
-	public function uninstall()
-	{
+	public function uninstall() {
 		{{UNINSTALL_INSTRUCTIONS}}
 	}
 
