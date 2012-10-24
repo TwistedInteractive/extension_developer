@@ -280,7 +280,7 @@ if(isset($_REQUEST['delegate']))
 		if(empty($value)) { $value = \'yes\'; }
 		$input = Widget::Input(\'settings['.$vars['FOLDER_NAME'].'][example-2]\', \'yes\' , \'checkbox\', ($value == \'yes\' ? array(\'checked\'=>\'checked\') : null));
 		$label->setValue($input->generate() . \' \' . __(\'Example #2\'));
-		$fieldset->appendChild($label);
+		$group->appendChild($label);
 
 		// Append help
 		$group->appendChild(new XMLElement(\'p\', __(\'Hello world!\'), array(\'class\' => \'help\')));
