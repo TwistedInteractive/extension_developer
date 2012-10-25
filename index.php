@@ -59,7 +59,7 @@ function inputVarsCheckbox($name, $label)
 			<?php
 				$errors = array();
 				if(!is_writable('export')) { $errors[] = 'The folder <code>export</code> is not writable.'; }
-				if(!is_writable('tmp')) { $errors[] = 'The folder <code>export</code> is not writable.'; }
+				if(!is_writable('tmp')) { $errors[] = 'The folder <code>tmp</code> is not writable.'; }
 				if(!class_exists('ZipArchive')) { $errors[] = 'PHPs\' <code>ZipArchive</code> module not found. Zip cannot be created.
 					You can still create your extensions, but after running the script, you have to manually download the content of the <code>export</code>-folder.'; }
 				if(!empty($errors))
